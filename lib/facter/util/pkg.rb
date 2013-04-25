@@ -4,6 +4,12 @@
 # returns that package's version as the fact value.  Useful for doing package
 # inventory and making decisions based on installed package versions.
 module Facter::Util::Pkg
+  def self.validname(name)
+    name
+      .tr('-+.','_') # RPM and deb packages might contain these
+      .sub(/:.*/,'') # Debian multiarch arch qualifiers
+  end
+
   def self.package_list
     packages = []
     case Facter.operatingsystem
@@ -11,13 +17,15 @@ module Facter::Util::Pkg
       command = 'dpkg-query -W'
       packages = []
       Facter::Util::Resolution.exec(command).each_line do |pkg|
-        packages << pkg.chomp.split("\t")
+        name,version = pkg.chomp.split("\t")
+        packages << [Facter::Util::Pkg::validname(name),version]
       end
     when 'CentOS', 'RedHat', 'Fedora'
       command = 'rpm -qa --qf %{NAME}"\t"%{VERSION}-%{RELEASE}"\n"'
       packages = []
       Facter::Util::Resolution.exec(command).each_line do |pkg|
-        packages << pkg.chomp.split("\t")
+        name,version = pkg.chomp.split("\t")
+        packages << [Facter::Util::Pkg::validname(name),version]
       end
     when 'Solaris'
       command = 'pkginfo -x'
