@@ -13,7 +13,7 @@ module Facter::Util::Pkg
       Facter::Util::Resolution.exec(command).each_line do |pkg|
         packages << pkg.chomp.split("\t")
       end
-    when 'CentOS', 'RedHat', 'Fedora', 'SLES'
+    when 'CentOS', 'RedHat', 'Fedora', 'SLES', 'Scientific'
       command = 'rpm -qa --qf %{NAME}"\t"%{VERSION}-%{RELEASE}"\n"'
       packages = []
       Facter::Util::Resolution.exec(command).each_line do |pkg|
