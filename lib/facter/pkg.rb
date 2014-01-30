@@ -6,11 +6,15 @@
 
 require 'facter/util/pkg'
 
+counter_hash = {}
 Facter::Util::Pkg.package_list.each do |key, value|
-  Facter.add(:"pkg_#{key}") do
-    confine :operatingsystem => %w{CentOS Fedora Redhat Debian Ubuntu Solaris SLES Scientific}
-    setcode do
-      value
-    end
+  if counter_hash[:"#{key}"].nil?
+    counter_hash[:"#{key}"] = value
+  else
+    counter_hash[:"#{key}"] << ", #{value}"
   end
+end
+
+counter_hash.each do |key, value|
+  Facter.add(:"pkg_#{key}") { setcode { value } }
 end
