@@ -12,7 +12,7 @@ module Facter::Util::Pkg
 
   def self.package_list
     packages = []
-    case Facter.operatingsystem
+    case Facter.value(:operatingsystem)
     when 'Debian', 'Ubuntu'
       command = 'dpkg-query -W'
       packages = []
