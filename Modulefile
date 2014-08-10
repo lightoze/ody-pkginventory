@@ -1,4 +1,4 @@
-name    'ody-pkginventory'
+name    'lightoze-pkginventory'
 version '0.0.3'
 source 'https://github.com/lightoze/ody-pkginventory'
 author 'lightoze'
