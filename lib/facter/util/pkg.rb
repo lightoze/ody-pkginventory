@@ -5,8 +5,8 @@
 # inventory and making decisions based on installed package versions.
 module Facter::Util::Pkg
   def self.validname(name)
-    name = name..tr('-+.','_') # RPM and deb packages might contain these
-    name = name..sub(/:.*/,'') # Debian multiarch arch qualifiers
+    name = name.tr('-+.','_') # RPM and deb packages might contain these
+    name = name.sub(/:.*/,'') # Debian multiarch arch qualifiers
     name
   end
 
